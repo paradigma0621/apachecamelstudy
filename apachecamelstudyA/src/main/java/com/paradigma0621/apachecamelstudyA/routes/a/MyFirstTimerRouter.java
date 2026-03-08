@@ -10,7 +10,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-@Component
+//@Component // temporarily disabled to keep console logs clean for other learning routes
 public class MyFirstTimerRouter extends RouteBuilder{
 
 	private final GetCurrentTimeBean getCurrentTimeBean;
