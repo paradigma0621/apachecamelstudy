@@ -1,6 +1,7 @@
 package com.paradigma0621.apachecamelstudyA.routes.a;
 
 import com.paradigma0621.apachecamelstudyA.routes.a.bean.GetCurrentTimeBean;
+import com.paradigma0621.apachecamelstudyA.routes.a.bean.SimpleLoggingProcessingComponent;
 import lombok.RequiredArgsConstructor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 public class MyFirstTimerRouter extends RouteBuilder{
 
 	private final GetCurrentTimeBean getCurrentTimeBean;
+	private final SimpleLoggingProcessingComponent loggingComponent;
 
 	@Override
 	public void configure() throws Exception {
@@ -22,6 +24,9 @@ public class MyFirstTimerRouter extends RouteBuilder{
 									// the method name is not specified because the class has only one method
 									// if the class has multiple methods, specify the method name:
 									// .bean(getCurrentTimeBean, "getCurrentTimeOrOtherMethodName")
+
+		.log("${body}")
+		.bean(loggingComponent) // logs the message without modifying the body
 		.log("${body}")
 		.to("log:first-timer");
 	}
