@@ -14,12 +14,15 @@ public class MyFirstTimerRouter extends RouteBuilder{
 	@Override
 	public void configure() throws Exception {
 		from("timer:first-timer")
-		// .transform().constant("My constant message") // Prints constant message in console log
+		.log("${body}")
+		.transform().constant("My constant message") // Prints constant message in console log
 		//.transform().constant("Time now is: " + LocalDateTime.now()) // Prints the same time message every time
+		.log("${body}")
 		.bean(getCurrentTimeBean) // now correctly updates and displays the current time
 									// the method name is not specified because the class has only one method
 									// if the class has multiple methods, specify the method name:
 									// .bean(getCurrentTimeBean, "getCurrentTimeOrOtherMethodName")
+		.log("${body}")
 		.to("log:first-timer");
 	}
 
