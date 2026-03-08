@@ -3,6 +3,9 @@ package com.paradigma0621.apachecamelstudyA.routes.a;
 import com.paradigma0621.apachecamelstudyA.routes.a.bean.GetCurrentTimeBean;
 import com.paradigma0621.apachecamelstudyA.routes.a.bean.SimpleLoggingProcessingComponent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +31,19 @@ public class MyFirstTimerRouter extends RouteBuilder{
 		.log("${body}")
 		.bean(loggingComponent) // logs the message without modifying the body
 		.log("${body}")
+		.process(new SimpleLoggingProcessor()) // another way to process the message - does not modify the message body
+		.log("${body}")
 		.to("log:first-timer");
+	}
+
+}
+
+@Slf4j
+class SimpleLoggingProcessor implements Processor {
+
+	@Override
+	public void process(Exchange exchange) throws Exception {
+		log.info("SimpleLoggingProcessor {}", exchange.getMessage().getBody());
 	}
 
 }

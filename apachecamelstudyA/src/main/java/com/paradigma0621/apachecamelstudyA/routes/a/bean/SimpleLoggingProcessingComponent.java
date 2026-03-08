@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SimpleLoggingProcessingComponent {
     public void process(Exchange exchange) throws Exception {
-        log.info("SimpleLoggingProcessor {}", exchange.getMessage().getBody());
+        log.info("SimpleLoggingProcessingComponent {}", exchange.getMessage().getBody());
     }
 }
