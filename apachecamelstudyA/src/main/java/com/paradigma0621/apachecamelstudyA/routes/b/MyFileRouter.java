@@ -3,7 +3,7 @@ package com.paradigma0621.apachecamelstudyA.routes.b;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component // temporarily disabled to keep console logs clean for other learning routes
 public class MyFileRouter extends RouteBuilder {
 
     @Override
