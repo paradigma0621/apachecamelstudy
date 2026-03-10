@@ -1,7 +1,7 @@
 # Apache Camel Study
 Created on: 2026-03-08
 
-Step-by-step learning project based on the Udemy course **"Learn Apache Camel Framework with Spring Boot"**.
+Step-by-step learning project based on the Udemy course **"Learn Apache Camel Framework with Spring Boot"**. (Notes in: `./Courses/Udemy-Learn Apache Camel Framework with Spring Boot`)
 
 ## To enable queue communication between microservices A and B, ensure the following service is running:
 ### ActiveMQ
