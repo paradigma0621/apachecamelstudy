@@ -14,8 +14,12 @@ public class ActiveMqSenderRouter extends RouteBuilder {
         //        .log("${body}")
         //        .to("activemq:my-activemq-queue");
 
-		from("file:files/json") // Sending JSON files to the queue. The JSON will be deserialized in microservice B
+        //		from("file:files/json") // Sending JSON files to the queue. The JSON will be deserialized in microservice B
+        //		.log("${body}")
+        //		.to("activemq:my-activemq-queue");
+
+		from("file:files/xml") // Sending XML files to the queue. The XML will be deserialized in microservice B
 		.log("${body}")
-		.to("activemq:my-activemq-queue");
+		.to("activemq:my-activemq-xml-queue");
     }
 }
