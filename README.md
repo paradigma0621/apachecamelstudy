@@ -5,9 +5,14 @@ Step-by-step learning project based on the Udemy course **"Learn Apache Camel Fr
 
 ## To enable queue communication between microservices A and B, ensure the following service is running:
 ### ActiveMQ
-- docker run -p 61616:61616 -p 8161:8161 rmohr/activemq
-
+Run: `docker run -p 61616:61616 -p 8161:8161 rmohr/activemq` <br>
 Login: <br>
 URL: http://localhost:8161/admin/ <br>
 User: admin <br>
 Password: admin <br>
+
+### Kafka
+Run: `docker compose up`
+(File in root path: `docker-compose.yml`) <br>
+Login: <br>
+URL: http://localhost:9000/ <br>

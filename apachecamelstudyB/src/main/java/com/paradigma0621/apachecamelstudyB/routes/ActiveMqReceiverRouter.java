@@ -28,10 +28,10 @@ public class ActiveMqReceiverRouter extends RouteBuilder {
         //.bean(myCurrencyExchangeTransformer)
         //.to("log:received-message-from-active-mq");
 
-        from("activemq:my-activemq-xml-queue")              // XML transfer from Microservice A
-		.unmarshal()
-		.jacksonXml(CurrencyExchange.class)
-		.to("log:received-message-from-activemq-xml");
+        //from("activemq:my-activemq-xml-queue")              // XML transfer from Microservice A
+        //.unmarshal()
+        //.jacksonXml(CurrencyExchange.class)
+        //.to("log:received-message-from-activemq-xml");
 
     }
 }

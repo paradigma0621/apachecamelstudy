@@ -4,7 +4,7 @@ package com.paradigma0621.apachecamelstudyA.routes.c;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
-@Component
+// @Component  // temporarily disabled to keep console logs clean for other learning routes
 public class ActiveMqSenderRouter extends RouteBuilder {
 
     @Override
@@ -18,8 +18,8 @@ public class ActiveMqSenderRouter extends RouteBuilder {
         //		.log("${body}")
         //		.to("activemq:my-activemq-queue");
 
-		from("file:files/xml") // Sending XML files to the queue. The XML will be deserialized in microservice B
-		.log("${body}")
-		.to("activemq:my-activemq-xml-queue");
+        //		from("file:files/xml") // Sending XML files to the queue. The XML will be deserialized in microservice B
+        //		.log("${body}")
+        //		.to("activemq:my-activemq-xml-queue");
     }
 }
