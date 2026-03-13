@@ -2,7 +2,7 @@ package com.paradigma0621.apachecamelstudyA.routes.c;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component // temporarily disabled to keep console logs clean for other learning routes
 public class RestApiConsumerRouter extends RouteBuilder {
 
     @Override

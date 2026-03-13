@@ -3,6 +3,10 @@ Created on: 2026-03-08
 
 Step-by-step learning project based on the Udemy course **"Learn Apache Camel Framework with Spring Boot"**. (Notes in: `./Courses/Udemy-Learn Apache Camel Framework with Spring Boot`)
 
+## Important Documentation
+- https://camel.apache.org/components/4.18.x/languages/simple-language.html
+- https://camel.apache.org/components/4.18.x/languages/file-language.html
+
 ## To enable queue communication between microservices A and B, ensure the following service is running:
 ### ActiveMQ
 Run: `docker run -p 61616:61616 -p 8161:8161 rmohr/activemq` <br>
