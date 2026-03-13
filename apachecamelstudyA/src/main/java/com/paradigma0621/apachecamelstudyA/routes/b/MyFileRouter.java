@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@Component
+//@Component // temporarily disabled to keep console logs clean for other learning routes
 public class MyFileRouter extends RouteBuilder {
 
     private final DeciderBean deciderBean;
