@@ -1,11 +1,20 @@
 package com.paradigma0621.apachecamelstudyA.routes.b;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.camel.Body;
+import org.apache.camel.ExchangeProperties;
+import org.apache.camel.Headers;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
+@RequiredArgsConstructor
 @Component
 public class MyFileRouter extends RouteBuilder {
+
+    private final DeciderBean deciderBean;
 
     @Override
     public void configure() throws Exception {
@@ -24,13 +33,14 @@ public class MyFileRouter extends RouteBuilder {
                                             // https://camel.apache.org/components/4.18.x/languages/simple-language.html
                                             // https://camel.apache.org/components/4.18.x/languages/file-language.html
                     .log("XML FILE")
-                .when(simple("${body} contains 'USD'"))
+                //.when(simple("${body} contains 'USD'"))
+                .when(method(deciderBean))                  // evaluate condition using DeciderBean
                     .log("Not an XML FILE BUT contains USD")
                 .otherwise()
                     .log("Not an XML FILE")
             .end()
             //.log("${messageHistory} ${headers.CamelFileAbsolutePath} ${file:name}")
-            .to("direct:log-file-values")                   // send message to internal route
+            //.to("direct:log-file-values")                   // send message to internal route
             .to("file:files/output");
 
         from("direct:log-file-values")                       // create an internal route endpoint
@@ -40,5 +50,19 @@ public class MyFileRouter extends RouteBuilder {
                 .log("${file:onlyname.noext} ${file:parent} ${file:path} ${file:absolute}")
                 .log("${file:size} ${file:modified}")
                 .log("${routeId} ${camelId} ${body}");
+    }
+}
+
+@Slf4j
+@Component
+class DeciderBean {
+
+    public boolean isThisConditionMet(@Body String body,
+                                      @Headers Map<String, String> headers,
+                                      @ExchangeProperties Map<String, String> exchangeProperties) {
+
+        log.info("DeciderBean {} {} {}", body, headers, exchangeProperties);
+        return true;                    // business logic should be implemented here
+
     }
 }
