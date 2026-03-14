@@ -1,6 +1,8 @@
 package com.paradigma0621.apachecamelstudyA.routes.patterns;
 
+import com.paradigma0621.apachecamelstudyA.model.CurrencyExchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,14 +27,31 @@ public class EipPatternsRouter extends RouteBuilder {
         //            "log:something3 parallel");            // third logging endpoint
 
 
-		from("file:files/csv")
-            .unmarshal().csv()          // Converts incoming serialized data (CSV, JSON, XML, etc.) into Java objects.
-                                        // It deserializes the message body so Camel routes can process structured data.
-                                        // Example: CSV text → List<List<String>> or JSON → Java DTO.
+        //from("file:files/csv")
+        //    .unmarshal().csv()          // Converts incoming serialized data (CSV, JSON, XML, etc.) into Java objects.
+        //                                // It deserializes the message body so Camel routes can process structured data.
+        //                                // Example: CSV text → List<List<String>> or JSON → Java DTO.
+        //
+        //    .split(body())                                  // break a message into multiple smaller messages and
+        //                                                    // process each one separately.
+        //                                                    // split takes the list and creates one message per element.
+        //    .to("activemq:split-queue");
 
-            .split(body())                                  // break a message into multiple smaller messages and
-                                                            // process each one separately.
-                                                            // split takes the list and creates one message per element.
-            .to("activemq:split-queue");
+
+        from("file:files/aggregate-json")
+                .unmarshal().json(JsonLibrary.Jackson, CurrencyExchange.class)  // Deserialize JSON files into Java
+                                                                            // objects so Camel can process their fields
+
+                .aggregate(simple("${body.id}"), new ArrayListAggregationStrategy())
+                // Aggregate EIP: groups incoming messages based on the value of the "id" field in the JSON body
+
+                .completionSize(2)
+                // Complete the aggregation when 2 messages with the same key are received,
+                // combining them into a single message (List)
+
+                //.completionTimeout(HIGHEST)
+                // Alternative completion condition: release aggregation after a time limit
+
+                .to("log:aggregate-json");          // Send the aggregated message to the log endpoint
     }
 }
