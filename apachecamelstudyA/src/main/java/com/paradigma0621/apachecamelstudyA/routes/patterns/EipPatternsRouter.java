@@ -38,20 +38,37 @@ public class EipPatternsRouter extends RouteBuilder {
         //    .to("activemq:split-queue");
 
 
-        from("file:files/aggregate-json")
-                .unmarshal().json(JsonLibrary.Jackson, CurrencyExchange.class)  // Deserialize JSON files into Java
-                                                                            // objects so Camel can process their fields
+        //from("file:files/aggregate-json")
+        //        .unmarshal().json(JsonLibrary.Jackson, CurrencyExchange.class)  // Deserialize JSON files into Java
+        //                                                                    // objects so Camel can process their fields
+        //        .aggregate(simple("${body.id}"), new ArrayListAggregationStrategy())
+        //                // Aggregate EIP: groups incoming messages based on the value of the "id" field in the JSON body
+        //        .completionSize(2)  // Complete the aggregation when 2 messages with the same key are received,
+        //                            // combining them into a single message (List)
+        //        //.completionTimeout(HIGHEST) // Alternative completion condition: release aggregation
+        //                                      // after a time limit
+        //        .to("log:aggregate-json"); // Send the aggregated message to the log endpoint
 
-                .aggregate(simple("${body.id}"), new ArrayListAggregationStrategy())
-                // Aggregate EIP: groups incoming messages based on the value of the "id" field in the JSON body
 
-                .completionSize(2)
-                // Complete the aggregation when 2 messages with the same key are received,
-                // combining them into a single message (List)
+        // Routing Slip EIP: allows the message to carry a list of endpoints that define
+        // the processing path dynamically at runtime. Camel will route the message
+        // sequentially through each endpoint specified in the routing slip.
+        // Unlike static routes, the message path is determined at runtime instead of being fixed in the code.
+        String routingSlip = "direct:endpoint1,direct:endpoint2,direct:endpoint3";
 
-                //.completionTimeout(HIGHEST)
-                // Alternative completion condition: release aggregation after a time limit
+		from("timer:routingSlip?period=5000")
+		.transform().constant("My Message is Hardcoded")
+		.routingSlip(simple(routingSlip));
 
-                .to("log:aggregate-json");          // Send the aggregated message to the log endpoint
+
+        from("direct:endpoint1")
+                .to("log:directendpoint1");
+
+        from("direct:endpoint2")
+                .to("log:directendpoint2");
+
+        from("direct:endpoint3")
+                .to("log:directendpoint3");
+
     }
 }
