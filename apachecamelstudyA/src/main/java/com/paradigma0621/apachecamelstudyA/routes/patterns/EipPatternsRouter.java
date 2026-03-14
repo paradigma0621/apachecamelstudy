@@ -1,12 +1,16 @@
 package com.paradigma0621.apachecamelstudyA.routes.patterns;
 
 import com.paradigma0621.apachecamelstudyA.model.CurrencyExchange;
+import lombok.RequiredArgsConstructor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class EipPatternsRouter extends RouteBuilder {
+
+    private final DynamicRouterBean dynamicRouterBean;
 
     @Override
     public void configure() throws Exception {
@@ -54,11 +58,19 @@ public class EipPatternsRouter extends RouteBuilder {
         // the processing path dynamically at runtime. Camel will route the message
         // sequentially through each endpoint specified in the routing slip.
         // Unlike static routes, the message path is determined at runtime instead of being fixed in the code.
-        String routingSlip = "direct:endpoint1,direct:endpoint2,direct:endpoint3";
+        //String routingSlip = "direct:endpoint1,direct:endpoint2,direct:endpoint3";
+        //
+        //from("timer:routingSlip?period=5000")
+        //.transform().constant("My Message is Hardcoded")
+        //.routingSlip(simple(routingSlip));
 
-		from("timer:routingSlip?period=5000")
-		.transform().constant("My Message is Hardcoded")
-		.routingSlip(simple(routingSlip));
+
+        // Dynamic Router EIP
+        // Instead of defining a fixed route, the next endpoint is decided at runtime
+        // by a bean that returns the next destination(s) for the message.
+        from("timer:dynamicRouting?period=5000")
+                .transform().constant("My message hardcoded")
+                .dynamicRouter(method(dynamicRouterBean));      // Delegates routing decision to the DynamicRouterBean
 
 
         from("direct:endpoint1")
