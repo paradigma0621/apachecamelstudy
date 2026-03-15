@@ -68,9 +68,11 @@ public class EipPatternsRouter extends RouteBuilder {
         // Dynamic Router EIP
         // Instead of defining a fixed route, the next endpoint is decided at runtime
         // by a bean that returns the next destination(s) for the message.
-        from("timer:dynamicRouting?period=5000")
-                .transform().constant("My message hardcoded")
-                .dynamicRouter(method(dynamicRouterBean));      // Delegates routing decision to the DynamicRouterBean
+        // In Dynamic Router, the method is invoked repeatedly until it returns null.
+        // This creates a routing decision loop, unlike Routing Slip which already contains the full list of endpoints.
+        //from("timer:dynamicRouting?period=5000")
+        //        .transform().constant("My message hardcoded")
+        //        .dynamicRouter(method(dynamicRouterBean));      // Delegates routing decision to the DynamicRouterBean
 
 
         from("direct:endpoint1")
