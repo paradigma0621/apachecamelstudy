@@ -14,6 +14,14 @@ public class EipPatternsRouter extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+
+        // Enable Camel route tracing for debugging: logs each processor and endpoint the message passes through
+        getContext().setTracing(true);
+
+        // Configure a Dead Letter Channel so that messages that fail during processing
+        // are redirected to the ActiveMQ dead-letter queue (no messages are lost)
+        errorHandler(deadLetterChannel("activemq:dead-letter-queue"));
+
         // EIP (Enterprise Integration Patterns)
         // Pipeline: sequential processing of messages (default behavior)
         // Multicast: send the same message to multiple endpoints
@@ -74,15 +82,37 @@ public class EipPatternsRouter extends RouteBuilder {
         //        .transform().constant("My message hardcoded")
         //        .dynamicRouter(method(dynamicRouterBean));      // Delegates routing decision to the DynamicRouterBean
 
+        //
+        //from("direct:endpoint1")
+        //        .to("log:directendpoint1");
+        //
+        //from("direct:endpoint2")
+        //        .to("log:directendpoint2");
+        //
+        //from("direct:endpoint3")
+        //        .to("log:directendpoint3");
 
-        from("direct:endpoint1")
-                .to("log:directendpoint1");
 
-        from("direct:endpoint2")
-                .to("log:directendpoint2");
+        // Simple route used to demonstrate the effect of getContext().setTracing(true)
+        // When tracing is enabled, Camel logs each step (transform, log:step1, log:step2)
+        // showing how the message flows through the route.
+        from("timer:test?period=5000")
+                .transform().constant("Hello, Camel")
+                .to("log:step1")
+                .to("log:step2");
 
-        from("direct:endpoint3")
-                .to("log:directendpoint3");
+        from("timer:test?period=5000")
+                .wireTap("log:wire-tap") // Sends a copy of the message to a secondary endpoint asynchronously
+                                            // without affecting the main route
+                .to("log:endpoint4");
 
+
+        from("timer:test?period=2000")
+                // Generate a message periodically to demonstrate the Dead Letter Channel behavior
+                .transform().constant("This message will be sent to activemq:dead-letter-queue")
+                // Log the message before the failure occurs
+                .log("Message before failure: ${body}")
+                // Simulate a processing error so the message is routed to the Dead Letter Queue
+                .throwException(new RuntimeException("Simulated processing failure"));
     }
 }

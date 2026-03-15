@@ -1,7 +1,8 @@
 # Apache Camel Study
 Created on: 2026-03-08
 
-Step-by-step learning project based on the Udemy course **"Learn Apache Camel Framework with Spring Boot"**. (Notes in: `./Courses/Udemy-Learn Apache Camel Framework with Spring Boot`)
+Step-by-step learning project based on the Udemy course **"Learn Apache Camel Framework with Spring Boot"** (https://www.udemy.com/course/apache-camel-framework-with-spring-boot/). <br>
+Notes in: `./Courses/Udemy-Learn Apache Camel Framework with Spring Boot`
 
 ## Important Documentation
 - https://camel.apache.org/components/4.18.x/languages/simple-language.html

@@ -11,9 +11,9 @@ public class BestPracticesProcessingComponent extends RouteBuilder {
     @Override
     public void configure() throws Exception {
                     // The execution interval is configured in application.properties (timePeriod=3000).
-            from("timer:logInConsole?period={{timePeriod}}")
+           // from("timer:logInConsole?period={{timePeriod}}")
                     // Sends the message to the endpoint defined in application.properties.
                     // This allows changing the logging destination without modifying the code
-            .to("{{endpoint-for-logging}}");
+            //.to("{{endpoint-for-logging}}");
     }
 }
